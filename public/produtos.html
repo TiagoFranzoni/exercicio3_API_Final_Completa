@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Meu site node</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="produtos.css">
+<script type="text/javascript" src="produtos.js"></script>
+<script type="text/javascript" src="toast/jquery.toast.js"></script>
+<link rel="stylesheet" href="toast/jquery.toast.css">
+</head>
+<body>
+<div class="container-xl">
+	<a class="btn btn-default" onclick="Deslogar()" style="float: right;">Deslogar</a>
+	<div class="table-responsive">
+		<div class="table-wrapper">
+			<div class="table-title">
+				<div class="row">
+					<div class="col-sm-6">
+						<h2>Gerenciar <b>Produtos</b></h2>
+					</div>
+					<div class="col-sm-6">
+						<a href="#addModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add Produto</span></a>					
+						<a id="btnFilter" href="#filterModal" class="btn btn-success" data-toggle="modal" style="display: inline-block;"><i class="material-icons">&#xE152;</i> <span>Filter Produto</span></a>
+						<a id="btnDefilter" class="btn btn-success" style="display: none;" onclick="Desfiltrar()"><i class="material-icons">&#xE152;</i> <span>Defilter Produto</span></a>					
+					</div>
+				</div>
+			</div>
+			<table class="table table-striped table-hover">
+				<thead>
+					<tr>
+						<th>Id</th>
+						<th>Descrição</th>
+						<th>Valor</th>
+						<th>Marca</th>
+						<th>Ações</th>
+					</tr>
+				</thead>
+				<tbody id="bodytable"></tbody>
+			</table>
+		</div>
+	</div>        
+</div>
+<label id="idacao"></label>
+<!-- Edit Modal FILTER HTML -->
+<div id="filterModal" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<form onsubmit="return false;">
+				<div class="modal-header">						
+					<h4 class="modal-title">Filter Produto</h4>
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				</div>
+				<div class="modal-body">
+					<div class="form-group">
+						<label>Id</label>
+						<input type="text" class="form-control" id="product-id" required>
+					</div>					
+				</div>
+				<div class="modal-footer">
+					<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+					<input type="submit" class="btn btn-success" value="Filter" onclick="Filtrar()">
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<!-- Edit Modal ADD HTML -->
+<div id="addModal" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<form onsubmit="return false;">
+				<div class="modal-header">						
+					<h4 class="modal-title">Add Produto</h4>
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				</div>
+				<div class="modal-body">					
+					<div class="form-group">
+						<label>Descrição</label>
+						<input id="descricaoadd" type="text" class="form-control" required>
+					</div>
+					<div class="form-group">
+						<label>Valor</label>
+						<input id="valoradd" type="text" class="form-control" required>
+					</div>
+					<div class="form-group">
+						<label>Marca</label>
+						<input id="marcaadd" type="text" class="form-control" required>
+					</div>			
+				</div>
+				<div class="modal-footer">
+					<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+					<input type="submit" class="btn btn-success" value="Add" onclick="AddProduto()">
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<!-- Edit Modal HTML -->
+<div id="editModal" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<form onsubmit="return false;">
+				<div class="modal-header">						
+					<h4 class="modal-title">Edit Produto</h4>
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				</div>
+				<div class="modal-body">					
+					<div class="form-group">
+						<label>Descrição</label>
+						<input id="descricao" type="text" class="form-control" required>
+					</div>
+					<div class="form-group">
+						<label>Valor</label>
+						<input id="valor" class="form-control" required>
+					</div>
+					<div class="form-group">
+						<label>Marca</label>
+						<input id="marca" type="text" class="form-control" required>
+					</div>					
+				</div>
+				<div class="modal-footer">
+					<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+					<input onclick="EditarProduto()" type="submit" class="btn btn-info" value="Save">
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<!-- Delete Modal HTML -->
+<div id="deleteModal" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<form onsubmit="return false;">
+				<div class="modal-header">						
+					<h4 class="modal-title">Delete Produto</h4>
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				</div>
+				<div class="modal-body">					
+					<p>Tem certeza de que deseja excluir esse registro?</p>
+					<p class="text-warning"><small>Esta ação não pode ser desfeita.</small></p>
+				</div>
+				<div class="modal-footer">
+					<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+					<input type="submit" class="btn btn-danger" value="Delete" onclick="Excluir()">
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+</body>
+</html>
